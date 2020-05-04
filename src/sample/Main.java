@@ -168,7 +168,7 @@ public class Main extends Application {
         Button create = new Button("Create");
 
         ChoiceBox<String> methods = new ChoiceBox();
-        methods.getItems().addAll("Jacobi method", "Seidel method");
+        methods.getItems().addAll("Jacobi method", "Zeidel method");
         methods.setValue("Jacobi method");
 
         create.setStyle("-fx-background-color : #008C9E");
@@ -269,24 +269,33 @@ public class Main extends Application {
             String countValue = count.getValue();
             int n = Integer.parseInt(countValue);
             String text = "";
-            double[][] A = new double[n][n+1];
-            A[0][0] = Double.parseDouble(x1_equations1.getText());
-            A[0][1] = Double.parseDouble(x2_equations1.getText());
-            A[0][2] = Double.parseDouble(x3_equations1.getText());
-            A[0][3] = Double.parseDouble(answer_equations1.getText());
-            A[1][0] = Double.parseDouble(x1_equations2.getText());
-            A[1][1] = Double.parseDouble(x2_equations2.getText());
-            A[1][2] = Double.parseDouble(x3_equations2.getText());
-            A[1][3] = Double.parseDouble(answer_equations2.getText());
-            A[2][0] = Double.parseDouble(x1_equations3.getText());
-            A[2][1] = Double.parseDouble(x2_equations3.getText());
-            A[2][2] = Double.parseDouble(x3_equations3.getText());
-            A[2][3] = Double.parseDouble(answer_equations3.getText());
-            Double exp = Double.parseDouble(epsilant.getText());
+            float[][] A = new float[n][n+1];
+            A[0][0] = Float.parseFloat(x1_equations1.getText());
+            A[0][1] = Float.parseFloat(x2_equations1.getText());
+            A[0][2] = Float.parseFloat(x3_equations1.getText());
+            A[0][3] = Float.parseFloat(answer_equations1.getText());
+            A[1][0] = Float.parseFloat(x1_equations2.getText());
+            A[1][1] = Float.parseFloat(x2_equations2.getText());
+            A[1][2] = Float.parseFloat(x3_equations2.getText());
+            A[1][3] = Float.parseFloat(answer_equations2.getText());
+            A[2][0] = Float.parseFloat(x1_equations3.getText());
+            A[2][1] = Float.parseFloat(x2_equations3.getText());
+            A[2][2] = Float.parseFloat(x3_equations3.getText());
+            A[2][3] = Float.parseFloat(answer_equations3.getText());
+            float[] b = new float[n];
+            b[0] = Float.parseFloat(answer_equations1.getText());
+            b[1] = Float.parseFloat(answer_equations2.getText());
+            b[2] = Float.parseFloat(answer_equations3.getText());
+            float exp =  Float.parseFloat(epsilant.getText());
             //SimpleIteration.iteration(A,exp,n);
-            result.setText(SimpleIteration.iteration(A,exp,n));
+            if(Zeidel.start(A, b, n, exp) == "The convergence condition isn`t satisfied"){
+                result.setText(Zeidel.start(A, b, n, exp));
+
+            }else {
+                result.setText(SimpleIteration.iteration(A,exp,n));
+            }
         }
-        if(methodValue == "Seidel method"){
+        if(methodValue == "Zeidel method"){
             String countValue = count.getValue();
             int n = Integer.parseInt(countValue);
             String text = "";

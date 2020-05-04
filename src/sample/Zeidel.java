@@ -13,7 +13,6 @@ public class Zeidel {
         float[][] rez = new float[100][n];
         for (int i = 0; i < x0.length; i++) {
             y[i] = x0[i];
-            // x[i] = x0[i];
             x[i] = 0;
         }
         boolean check = true;
@@ -85,14 +84,13 @@ public class Zeidel {
         } else {
             int k = 10;
 
-            float[][] y = zeidep(B, b, n, x0, 0.000001f);
+            float[][] y = zeidep(B, b, n, x0, exp);
             for (int i = 0; i < y.length; i++) {
                 for (int j = 0; j < n; j++) {
-                    System.out.println(y[i][j] + " ");
-                    txt += y[i][j] + " ";
+                    //System.out.println(y[i][j] + " ");
+                    txt += y[i][j] + "\n";
                 }
-                System.out.println("\n");
-                txt += "\n";
+                //System.out.println("\n");
                 if (y[i][0] == y[i + 1][0]) {
                     break;
                 }
@@ -100,4 +98,5 @@ public class Zeidel {
         }
         return  txt;
     }
+
 }
