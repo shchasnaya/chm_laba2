@@ -1,5 +1,6 @@
 package sample;
 
+import Jama.Matrix;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -262,13 +263,54 @@ public class Main extends Application {
     }
 
     public void getMethod(ChoiceBox<String> method, ChoiceBox<String> count){
+        String text = "";
+        int n = 3;
+        double[][] AA = new double[n][n];
+        AA[0][0] = Double.parseDouble(x1_equations1.getText());
+        AA[0][1] = Double.parseDouble(x2_equations1.getText());
+        AA[0][2] = Double.parseDouble(x3_equations1.getText());
+        AA[1][0] = Double.parseDouble(x1_equations2.getText());
+        AA[1][1] = Double.parseDouble(x2_equations2.getText());
+        AA[1][2] = Double.parseDouble(x3_equations2.getText());
+        AA[2][0] = Double.parseDouble(x1_equations3.getText());
+        AA[2][1] = Double.parseDouble(x2_equations3.getText());
+        AA[2][2] = Double.parseDouble(x3_equations3.getText());
+        double[] bb = new double[n];
+        bb[0] = Double.parseDouble(answer_equations1.getText());
+        bb[1] = Double.parseDouble(answer_equations2.getText());
+        bb[2] =Double.parseDouble(answer_equations3.getText());
+
+        Matrix A_matrix = new Matrix(AA);
+        int rank_A = A_matrix.rank();
+        double[][] AB = new double[n+1][n+1];
+        AB[0][0] = Double.parseDouble(x1_equations1.getText());
+        AB[0][1] = Double.parseDouble(x2_equations1.getText());
+        AB[0][2] = Double.parseDouble(x3_equations1.getText());
+        AB[1][0] = Double.parseDouble(x1_equations2.getText());
+        AB[1][1] = Double.parseDouble(x2_equations2.getText());
+        AB[1][2] = Double.parseDouble(x3_equations2.getText());
+        AB[2][0] = Double.parseDouble(x1_equations3.getText());
+        AB[2][1] = Double.parseDouble(x2_equations3.getText());
+        AB[2][2] = Double.parseDouble(x3_equations3.getText());
+        AB[3][0] = Double.parseDouble(answer_equations1.getText());
+        AB[3][1] = Double.parseDouble(answer_equations2.getText());
+        AB[3][2] =Double.parseDouble(answer_equations3.getText());
+        Matrix AB_Matrix = new Matrix(AB);
+        int rank_Ab = AB_Matrix.rank();
+        if(rank_A != rank_Ab){
+            result.setText("This system is inconsistent.");
+            return;
+        }
+        if(rank_A == rank_Ab && rank_A < n){
+            text = "rank(A) = rank(A|b) < № of variables" +  rank_A + "\nThis system is consistent and has many solutions.\n";
+        }else {
+            text = "rank(A) = rank(A|b) = № of variables" + rank_A + "\nThis system is consistent and has unique solution.\n";
+        }
+
 
         String methodValue = method.getValue();
         if(methodValue == "Jacobi method"){
 
-            String countValue = count.getValue();
-            int n = Integer.parseInt(countValue);
-            String text = "";
             float[][] A = new float[n][n+1];
             A[0][0] = Float.parseFloat(x1_equations1.getText());
             A[0][1] = Float.parseFloat(x2_equations1.getText());
@@ -282,44 +324,45 @@ public class Main extends Application {
             A[2][1] = Float.parseFloat(x2_equations3.getText());
             A[2][2] = Float.parseFloat(x3_equations3.getText());
             A[2][3] = Float.parseFloat(answer_equations3.getText());
+
             float[] b = new float[n];
             b[0] = Float.parseFloat(answer_equations1.getText());
             b[1] = Float.parseFloat(answer_equations2.getText());
-            b[2] = Float.parseFloat(answer_equations3.getText());
+            b[2] =Float.parseFloat(answer_equations3.getText());
             float exp =  Float.parseFloat(epsilant.getText());
-            //SimpleIteration.iteration(A,exp,n);
+
+            SimpleIteration.iteration(A,exp,n);
             if(Zeidel.start(A, b, n, exp) == "The convergence condition isn`t satisfied"){
-                result.setText(Zeidel.start(A, b, n, exp));
+                text += Zeidel.start(A, b, n, exp);
 
             }else {
-                result.setText(SimpleIteration.iteration(A,exp,n));
+                text += SimpleIteration.iteration(A,exp,n);
             }
+
         }
         if(methodValue == "Zeidel method"){
             String countValue = count.getValue();
-            int n = Integer.parseInt(countValue);
-            String text = "";
+            //int n = Integer.parseInt(countValue);
+
             float[][] A = new float[n][n];
             A[0][0] = Float.parseFloat(x1_equations1.getText());
-            A[0][1] = Float.parseFloat(x2_equations1.getText());
-            A[0][2] = Float.parseFloat(x3_equations1.getText());
-            A[1][0] = Float.parseFloat(x1_equations2.getText());
-            A[1][1] = Float.parseFloat(x2_equations2.getText());
-            A[1][2] = Float.parseFloat(x3_equations2.getText());
-            A[2][0] = Float.parseFloat(x1_equations3.getText());
-            A[2][1] = Float.parseFloat(x2_equations3.getText());
-            A[2][2] = Float.parseFloat(x3_equations3.getText());
+            A[0][1] =  Float.parseFloat(x2_equations1.getText());
+            A[0][2] =  Float.parseFloat(x3_equations1.getText());
+            A[1][0] =  Float.parseFloat(x1_equations2.getText());
+            A[1][1] =  Float.parseFloat(x2_equations2.getText());
+            A[1][2] =  Float.parseFloat(x3_equations2.getText());
+            A[2][0] =  Float.parseFloat(x1_equations3.getText());
+            A[2][1] =  Float.parseFloat(x2_equations3.getText());
+            A[2][2] =  Float.parseFloat(x3_equations3.getText());
             float[] b = new float[n];
             b[0] = Float.parseFloat(answer_equations1.getText());
-            b[1] = Float.parseFloat(answer_equations2.getText());
+            b[1] =  Float.parseFloat(answer_equations2.getText());
             b[2] = Float.parseFloat(answer_equations3.getText());
-            float exp = Float.parseFloat(epsilant.getText());
+            float exp =  Float.parseFloat(epsilant.getText());
 
-            result.setText(Zeidel.start(A, b, n, exp));
+            text += Zeidel.start(A, b, n, exp);
         }
-
-        //result.appendText(text.toString());
-
+        result.setText(text);
     }
 
     public void getCreate(ChoiceBox<String> count, GridPane center) {
